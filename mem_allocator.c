@@ -60,7 +60,7 @@
 
 #define 	WSIZE		4
 #define 	DSIZE		8
-#define 	CHUNCKSIZE	(1<<12)
+#define 	CHUNKSIZE	(1<<12)
 
 char* heap_listp;
 void * alloc_ptr;
@@ -235,11 +235,11 @@ void *mm_malloc(size_t size)
 	alloc_ptr = find_fit(asize);
 
 	if(alloc_ptr != NULL){
-		place(alloc_ptr,size);
+		place(alloc_ptr,asize);
 		return alloc_ptr;
 	}
 
-	extendsize = MAX(asize, CHUNCKSIZE);
+	extendsize = MAX(asize, CHUNKSIZE);
 	if((alloc_ptr = extend_heap(extendsize/WSIZE)) == NULL)
 		return NULL;
 	place(alloc_ptr,asize);
@@ -262,7 +262,7 @@ int mm_init()
 	PUT(heap_listp + (3*WSIZE),PACK(0,1));
 	heap_listp += (2*WSIZE);
 
-	if(extend_heap(CHUNCKSIZE/WSIZE) == NULL)
+	if(extend_heap(CHUNKSIZE/WSIZE) == NULL)
 		return -1;
 	return 0;
 }
